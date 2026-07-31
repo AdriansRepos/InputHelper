@@ -26,16 +26,14 @@
         public static string ZpracujNazevMesta(string nazevMesta)
         {
             if (string.IsNullOrWhiteSpace(nazevMesta))
-                return string.Empty;
+                throw new ArgumentException("Zadej platný název města, vstup nemůže být prázdný.");
 
             string[] slova = nazevMesta.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
             for (int i = 0; i < slova.Length; i++)
             {
                 // Zpracuje i části spojené pomlčkou (Frýdek-Místek)
                 slova[i] = ZpracujSlovo(slova[i], jePrvni: i == 0);
             }
-
             return string.Join(' ', slova);
         }
 
@@ -45,11 +43,9 @@
         private static string ZpracujSlovo(string slovo, bool jePrvni)
         {
             string[] casti = slovo.Split('-');
-
             for (int i = 0; i < casti.Length; i++)
             {
                 bool jePrvniCastCelehoNazvu = jePrvni && i == 0;
-
                 if (!jePrvniCastCelehoNazvu && MalePredlozky.Contains(casti[i]))
                 {
                     casti[i] = casti[i].ToLower();
@@ -59,7 +55,6 @@
                     casti[i] = VelkePismenoNaZacatku(casti[i]);
                 }
             }
-
             return string.Join('-', casti);
         }
 

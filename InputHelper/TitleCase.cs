@@ -12,7 +12,7 @@ namespace InputHelper
         public static string ToTitleCase(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
-                return text;
+                throw new ArgumentException("Zadej platný text, vstup nemůže být prázdný.");
             try
             {
                 var culture = new CultureInfo("cs-CZ");
