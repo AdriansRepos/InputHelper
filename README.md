@@ -11,35 +11,31 @@ Knihovna sama vyhodnocuje neplatný vstup a vyhazuje výjimku se srozumitelnou z
 ### `TitleCase`
 Převede libovolný text na formát s velkým počátečním písmenem u každého slova, podle pravidel české (cs-CZ) gramatiky. Vhodné pro jména, příjmení a obecné texty bez speciálních výjimek.
 
+### `MestoTitleCase`
+Rozšíření `TitleCase` s ohledem na specifika českých názvů měst – předložky uprostřed názvu (nad, pod, u, v, na...) zůstávají malé, zatímco zbytek se převede na velké počáteční písmeno. Podporuje i pomlčková spojení (Frýdek-Místek).
+
+### `OsobniJmeno`
+Rozdělí jeden vstupní řetězec na křestní jméno a příjmení podle první mezery a oboje převede přes `TitleCase`. Vhodné tam, kde chce aplikace zadávat jméno a příjmení jedním vstupem místo dvou samostatných otázek.
+
+### `RodneCislo`
+Ověří formát rodného čísla (9 číslic pro narození do roku 1954, 10 číslic od roku 1954 dál, s volitelným lomítkem po šesté číslici) a vrátí ho normalizované s lomítkem. U desetimístných čísel navíc kontroluje dělitelnost jedenácti.
+
+## Použití
+
 ```csharp
 TitleCase.ToTitleCase("jan novák")  // "Jan Novák"
 ```
 
 Vyhodí `ArgumentException`, pokud je vstup prázdný nebo obsahuje jen bílé znaky.
 
-### `MestoTitleCase`
-Rozšíření `TitleCase` s ohledem na specifika českých názvů měst – předložky uprostřed názvu (nad, pod, u, v, na...) zůstávají malé, zatímco zbytek se převede na velké počáteční písmeno. Podporuje i pomlčková spojení (Frýdek-Místek).
+---
 
-```csharp
-MestoTitleCase.ZpracujNazevMesta("ústí nad labem")  // "Ústí nad Labem"
-```
-
-Vyhodí `ArgumentException`, pokud je vstup prázdný nebo obsahuje jen bílé znaky.
-
-### `OsobniJmeno`
-Rozdělí jeden vstupní řetězec na křestní jméno a příjmení podle první mezery a oboje převede přes `TitleCase`. Vhodné tam, kde chce aplikace zadávat jméno a příjmení jedním vstupem místo dvou samostatných otázek.
-
-```csharp
-var (jmeno, prijmeni) = OsobniJmeno.Rozdel("jan novák");
-// jmeno = "Jan", prijmeni = "Novák"
-```
-
-Vyhodí `ArgumentException`, pokud vstup neobsahuje mezeru oddělující jméno a příjmení (tedy chybí buď jméno, nebo příjmení).
-
-## Použití
+Pro město, i výceslovné:
 
 ```csharp
 using InputHelper;
+
+MestoTitleCase.ZpracujNazevMesta("ústí nad labem")  // "Ústí nad Labem"
 
 string mesto = UpravaVstupu.ZeptejSeAUprav(
     "", "město",
@@ -48,10 +44,17 @@ string mesto = UpravaVstupu.ZeptejSeAUprav(
     jeNove: true);
 ```
 
-Pro jméno a příjmení jedním vstupem:
+Vyhodí `ArgumentException`, pokud je vstup prázdný nebo obsahuje jen bílé znaky.
+
+---
+
+Pro jméno a příjmení zadáno v jednom řádku oddělené mezerou:
 
 ```csharp
 using InputHelper;
+
+var (jmeno, prijmeni) = OsobniJmeno.Rozdel("jan novák");
+// jmeno = "Jan", prijmeni = "Novák"
 
 Console.Write("Jméno a příjmení: ");
 var (jmeno, prijmeni) = UpravaVstupu.ZeptejSeAUprav(
@@ -61,3 +64,22 @@ var (jmeno, prijmeni) = UpravaVstupu.ZeptejSeAUprav(
     s => OsobniJmeno.Rozdel(s),
     jeNove: true);
 ```
+
+Vyhodí `ArgumentException`, pokud vstup neobsahuje mezeru oddělující jméno a příjmení (tedy chybí buď jméno, nebo příjmení).
+
+---
+
+```csharp
+using InputHelper;
+
+RodneCislo.Zkontroluj("9001011234")   // "900101/1234"
+RodneCislo.Zkontroluj("900101/1234")  // "900101/1234"
+
+string rodneCislo = UpravaVstupu.ZeptejSeAUprav(
+    "", "rodné číslo (např. 900101/1234)",
+    v => v,
+    s => RodneCislo.Zkontroluj(s),
+    jeNove: true);
+```
+
+Vyhodí `ArgumentException`, pokud je vstup prázdný, má neplatnou délku, obsahuje neplatný měsíc/den narození, nebo neprojde kontrolou dělitelnosti jedenácti.
