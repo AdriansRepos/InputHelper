@@ -30,7 +30,7 @@ Vyhodí `ArgumentException`, pokud je vstup prázdný nebo obsahuje jen bílé z
 
 ---
 
-Pro město, i výceslovné:
+Pro město, i víceslovné:
 
 ```csharp
 using InputHelper;
