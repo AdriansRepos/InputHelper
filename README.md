@@ -83,3 +83,13 @@ string rodneCislo = UpravaVstupu.ZeptejSeAUprav(
 ```
 
 Vyhodí `ArgumentException`, pokud je vstup prázdný, má neplatnou délku, obsahuje neplatný měsíc/den narození, nebo neprojde kontrolou dělitelnosti jedenácti.
+
+## Instalace jako NuGet balíček
+
+Tato knihovna je dostupná také jako balíček v **GitHub Packages**. Můžete si ji snadno přidat do svého projektu:
+
+1. Nastavte si jako zdroj balíčků váš GitHub (pokud ho ještě nemáte v NuGet.config).
+2. V **Package Manager Console** spusťte příkaz:
+   ```powershell
+   Install-Package BarevneVypisyHelper
+   ```
