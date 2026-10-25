@@ -4,6 +4,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>InputHelper</Title>
+    <Authors>AdriansRepos</Authors>
+    <Description>Knihovna pro validaci a úpravu textových vstupů od uživatele – jména, příjmení, názvy měst a další texty, 
+u kterých má smysl vynutit gramaticky správný formát (velké počáteční písmeno).</Description>
+    <PackageProjectUrl>https://github.com/AdriansRepos/InputHelper</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/AdriansRepos/InputHelper</RepositoryUrl>
+    <Version>1.4.0</Version>
+
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
