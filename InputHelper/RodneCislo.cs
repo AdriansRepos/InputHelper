@@ -36,10 +36,29 @@
             if (den is < 1 or > 31)
                 throw new ArgumentException("Rodné číslo obsahuje neplatný den narození.");
 
+            // 1. Přísnější kalendářní validace (včetně přestupných roků a správných konců měsíců)
+            int rok = int.Parse(datumovaCast[..2]);
+            // Odhad století (Úřad práce/ZOO bude pracovat s lidmi narozenými cca 1900-2099)
+            int plnyRok = rok + (rok > 53 ? 1900 : 2000); 
+
+            try
+            {
+                // C# sám pohlídá, že únor nemá 30 dní, duben nemá 31 dní atd.
+                var _ = new DateOnly(plnyRok, mesicUpraveny, den);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new ArgumentException("Rodné číslo obsahuje neplatné nebo neexistující datum narození.");
+            }
+
+            // 2. Oprava kontroly dělitelnosti 11 s ohledem na výjimku koncovky 000
             if (cisliceJen.Length == 10)
             {
                 long celeCislo = long.Parse(cisliceJen);
-                if (celeCislo % 11 != 0)
+                bool jeDojednacti = celeCislo % 11 == 0;
+                bool jeVyjimkaRocniku = cisliceJen.EndsWith("000") && celeCislo % 11 == 10;
+
+                if (!jeDojednacti && !jeVyjimkaRocniku)
                     throw new ArgumentException("Rodné číslo neprošlo kontrolou dělitelnosti jedenácti (překlep?).");
             }
 
