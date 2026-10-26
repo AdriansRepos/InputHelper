@@ -91,5 +91,5 @@ Tato knihovna je dostupná také jako balíček v **GitHub Packages**. Můžete 
 1. Nastavte si jako zdroj balíčků váš GitHub (pokud ho ještě nemáte v NuGet.config).
 2. V **Package Manager Console** spusťte příkaz:
    ```powershell
-   Install-Package BarevneVypisyHelper
+   Install-Package InputHelper
    ```
